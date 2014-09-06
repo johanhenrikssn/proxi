@@ -14,8 +14,9 @@ int attr pieInnerCircleRatio 0x7f010000
 int attr pieSlicePadding 0x7f010001
 int dimen activity_horizontal_margin 0x7f050000
 int dimen activity_vertical_margin 0x7f050001
-int drawable ic_launcher 0x7f020000
-int drawable popup_black 0x7f020001
+int drawable ic_fa_leaf 0x7f020000
+int drawable ic_launcher 0x7f020001
+int drawable popup_black 0x7f020002
 int id action_settings 0x7f040003
 int id graph 0x7f040002
 int id horizontal 0x7f040000
