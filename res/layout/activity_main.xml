@@ -7,10 +7,16 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.proxi.MainActivity" >
+    
+    <com.echo.holographlibrary.PieGraph
+        style="@style/pie_chart"
+        android:id="@+id/graph"
+        />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
+       	style="@style/front_text"
+        android:text="@string/hello_world" 
+        
+    	/>
 
 </RelativeLayout>

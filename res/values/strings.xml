@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">proxi</string>
-    <string name="hello_world">Test world!</string>
+    <string name="hello_world">14</string>
     <string name="action_settings">Settings</string>
 
 </resources>
