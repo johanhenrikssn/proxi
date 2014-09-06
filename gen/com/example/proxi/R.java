@@ -152,9 +152,10 @@ containing a value of this type.
         public static final int popup_black=0x7f020002;
     }
     public static final class id {
-        public static final int action_settings=0x7f040003;
+        public static final int action_settings=0x7f040004;
         public static final int graph=0x7f040002;
         public static final int horizontal=0x7f040000;
+        public static final int post_btn=0x7f040003;
         public static final int vertical=0x7f040001;
     }
     public static final class layout {
@@ -166,6 +167,7 @@ containing a value of this type.
     public static final class string {
         public static final int action_settings=0x7f060003;
         public static final int app_name=0x7f060000;
+        public static final int button_send=0x7f060004;
         public static final int hello_world=0x7f060001;
         public static final int info=0x7f060002;
     }
