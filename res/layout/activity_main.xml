@@ -1,4 +1,4 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,15 +8,35 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.proxi.MainActivity" >
     
-    <com.echo.holographlibrary.PieGraph
-        style="@style/pie_chart"
-        android:id="@+id/graph"
-        />
-
-    <TextView
-       	style="@style/front_text"
-        android:text="@string/hello_world" 
+    <RelativeLayout
+        android:layout_width="wrap_content"
+  		android:layout_height="wrap_content"> 
+       
+        <TextView
+            style="@style/text_score"
+            android:layout_centerHorizontal="true"
+         
+            android:text="@string/hello_world" />
+	
+		<com.echo.holographlibrary.PieGraph
+		    android:id="@+id/graph"
+		    style="@style/pie_chart"
+		    android:layout_centerHorizontal="true"
+		 />
+		
+		<TextView
+		    style="@style/text_more"
+		    android:text="@string/info"
+		    android:layout_below="@+id/graph" />
+		
+    </RelativeLayout>
         
-    	/>
+	
+	
+	
+	    
+	    
+	    
 
-</RelativeLayout>
+     
+</LinearLayout>

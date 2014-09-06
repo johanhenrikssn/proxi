@@ -3,6 +3,9 @@
 
     <string name="app_name">proxi</string>
     <string name="hello_world">14</string>
+    <string name="info">Sammanfattning av dag: 5km rörelse
+        				Olika rörelseformler: 3 st
+    					Snitthastighet: 2 m/s</string>
     <string name="action_settings">Settings</string>
 
 </resources>

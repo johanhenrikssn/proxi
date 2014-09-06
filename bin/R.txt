@@ -22,13 +22,15 @@ int id horizontal 0x7f040000
 int id vertical 0x7f040001
 int layout activity_main 0x7f030000
 int menu main 0x7f080000
-int string action_settings 0x7f060002
+int string action_settings 0x7f060003
 int string app_name 0x7f060000
 int string hello_world 0x7f060001
+int string info 0x7f060002
 int style AppBaseTheme 0x7f070000
 int style AppTheme 0x7f070001
-int style front_text 0x7f070002
-int style pie_chart 0x7f070003
+int style pie_chart 0x7f070002
+int style text_more 0x7f070004
+int style text_score 0x7f070003
 int[] styleable BarGraph { 0x7f010008, 0x7f010009, 0x7f01000a, 0x7f01000b, 0x7f01000c, 0x7f01000d }
 int styleable BarGraph_barAxisColor 0
 int styleable BarGraph_barShowAxis 2
