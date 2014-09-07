@@ -1,9 +1,14 @@
 package com.example.proxi;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
@@ -11,11 +16,15 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONObject;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.StrictMode;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,6 +38,8 @@ import com.echo.holographlibrary.PieSlice;
 
 public class MainActivity extends Activity {
 
+	Intent i;
+	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,20 +65,83 @@ public class MainActivity extends Activity {
         int padding = 1;
         pg.setPadding(padding);
         
-        Button btn = (Button) findViewById(R.id.post_btn);
-        btn.setOnClickListener(new OnClickListener( ) {
-        	
-        	@Override
-        	public void onClick(View v)
-        	{
-				new MyAsyncTask().execute();		
-        	}
-       
-        });
+        final String Start_Lat = "123";
+        final String Start_Long = "456";
+        final String End_Lat = "789";
+        final String End_Long = "321";
+        final String User = "Johan";
         
+        Button btn = (Button) findViewById(R.id.post_btn);
+        btn.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                new MyAsyncPost().execute(new String[]{Start_Lat, Start_Long, End_Lat, End_Long, User});
+            }
+
+        });
+
+        String username = "Johan";
+        String LongLat = HttpGet(username);
         
     }
+    
+    private String HttpGet(String username) {
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
 
+
+        String result = "";
+        //the year data to send
+        ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+        nameValuePairs.add(new BasicNameValuePair("User",username));
+
+        String sInfo = "";
+
+        //http post
+        try{
+            HttpClient httpclient = new DefaultHttpClient();
+            HttpPost httppost = new HttpPost("http://www.johanhenriksson.se/recieve.php");
+            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+            HttpResponse response = httpclient.execute(httppost);
+            HttpEntity entity = response.getEntity();
+            InputStream is = entity.getContent();
+
+            //convert response to string
+            try{
+                BufferedReader reader = new BufferedReader(new InputStreamReader(is,"iso-8859-1"),8);
+                StringBuilder sb = new StringBuilder();
+                String line = null;
+                while ((line = reader.readLine()) != null) {
+                    sb.append(line + "\n");
+                }
+                is.close();
+
+                result=sb.toString();
+
+                Log.e("log_tag", result);
+
+                // parse json data
+                try {
+                    JSONObject json_data = new JSONObject(result);
+                    sInfo = "Longitude: " + json_data.getString("Longitude")
+                            + ", Latitude: "
+                            + json_data.getString("Latitude");
+                    Log.e("log_tag", sInfo);
+                } catch (Exception e) {
+                    Log.e("log_tag", "Error parsing data " + e.toString());
+                }
+
+            }catch(Exception e){
+                Log.e("log_tag", "Error converting result "+e.toString());
+            }
+
+
+        }catch(Exception e){
+            Log.e("log_tag", "Error in http connection "+e.toString());
+        }
+        return sInfo;
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -76,16 +150,16 @@ public class MainActivity extends Activity {
         return true;
     }
     
-    private class MyAsyncTask extends AsyncTask<String, Integer, Double>{
-    	 
+    private class MyAsyncPost extends AsyncTask<String, Integer, Double>{
+   	 
 		@Override
 		protected Double doInBackground(String... params) {
 			// TODO Auto-generated method stub
-			HttpPost();
+			HttpPost(params);
 			return null;
 		}
  
-		public void HttpPost(){
+		public void HttpPost(String [] params){
 		    
 	    	HttpClient client = new DefaultHttpClient();
 	        
@@ -94,11 +168,11 @@ public class MainActivity extends Activity {
 	  	  try {
 	        
 	  		  List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-	  		  nameValuePairs.add(new BasicNameValuePair("Start_Lat","123456789"));
-	  		  nameValuePairs.add(new BasicNameValuePair("Start_Long","123456789"));
-	  		  nameValuePairs.add(new BasicNameValuePair("End_Lat","123456789"));
-	  		  nameValuePairs.add(new BasicNameValuePair("End_Long","123456789"));
-	  		  nameValuePairs.add(new BasicNameValuePair("User","hej"));
+	  		  nameValuePairs.add(new BasicNameValuePair("Start_Lat", params[0]));
+	  		  nameValuePairs.add(new BasicNameValuePair("Start_Long", params[1]));
+	  		  nameValuePairs.add(new BasicNameValuePair("End_Lat", params[2]));
+	  		  nameValuePairs.add(new BasicNameValuePair("End_Long", params[3]));
+	  		  nameValuePairs.add(new BasicNameValuePair("User", params[4]));
 	  		  
 	  		  //We need to encode our data into valid URL format before making HTTP request.		  
 	  		  post.setEntity(new UrlEncodedFormEntity(nameValuePairs));
@@ -111,7 +185,6 @@ public class MainActivity extends Activity {
 				// TODO Auto-generated catch block
 			}
 		}
- 
 	}
 
     @Override
@@ -125,4 +198,6 @@ public class MainActivity extends Activity {
         }
         return super.onOptionsItemSelected(item);
     }
+    
+    
 }
