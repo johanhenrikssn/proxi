@@ -9,6 +9,7 @@
     tools:context="com.example.proxi.MainActivity" >
        
         <TextView
+            android:id="@+id/score_txt"
             style="@style/text_score"
             android:layout_centerHorizontal="true"
          
@@ -20,18 +21,19 @@
 		    android:layout_centerHorizontal="true"
 		 />
 		
-		<TextView
-		    style="@style/text_more"
-		    android:layout_below="@+id/graph"
-		    android:paddingLeft="10dp"
-		    android:paddingRight="10dp"
-		    android:text="@string/info" />
-		
 		<Button
 		    android:id="@+id/post_btn"
     		android:layout_width="wrap_content"
     		android:layout_height="wrap_content"
     		android:text="@string/button_send"
     		 />
+
+		<ImageView
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_alignParentBottom="true"
+		    android:contentDescription="@null"
+		    android:paddingBottom="50dp"
+		    android:src="@drawable/proxi" />
 
 </RelativeLayout>

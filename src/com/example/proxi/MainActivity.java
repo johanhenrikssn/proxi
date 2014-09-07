@@ -23,6 +23,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.StrictMode;
 import android.util.Log;
 import android.view.Menu;
@@ -30,6 +31,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.echo.holographlibrary.PieGraph;
 import com.echo.holographlibrary.PieSlice;
@@ -39,6 +41,13 @@ import com.echo.holographlibrary.PieSlice;
 public class MainActivity extends Activity {
 
 	Intent i;
+	String tot_score;
+	TextView txt;
+	String username;
+
+	
+	private Handler mHandler = new Handler ();
+	
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,17 +56,23 @@ public class MainActivity extends Activity {
         
         
         PieGraph pg = (PieGraph)findViewById(R.id.graph);
+        
+        //Cykel
         PieSlice slice = new PieSlice();
         slice.setColor(Color.parseColor("#00485B"));
-        slice.setValue(2);
+        slice.setValue(10);
         pg.addSlice(slice);
+        
+        //Gång
         slice = new PieSlice();
         slice.setColor(Color.parseColor("#A3CEDA"));
-        slice.setValue(3);
+        slice.setValue(20);
         pg.addSlice(slice);
+        
+        //Löpning
         slice = new PieSlice();
         slice.setColor(Color.parseColor("#0095A6"));
-        slice.setValue(8);
+        slice.setValue(30);
         pg.addSlice(slice);
         
         int hole = 180;
@@ -65,31 +80,50 @@ public class MainActivity extends Activity {
         int padding = 1;
         pg.setPadding(padding);
         
-        final String Start_Lat = "123";
-        final String Start_Long = "456";
-        final String End_Lat = "789";
-        final String End_Long = "321";
+        final String Start_Lat = "58.394501";
+        final String Start_Long = "15.561850";
+        final String End_Lat = "58.400888";
+        final String End_Long = "15.572107";
         final String User = "Johan";
+        final String Start_Time = "2014-09-07 12:46";
+        final String End_Time = "2014-09-07 12:47";
+
+        txt = (TextView) findViewById(R.id.score_txt);
         
         Button btn = (Button) findViewById(R.id.post_btn);
         btn.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                new MyAsyncPost().execute(new String[]{Start_Lat, Start_Long, End_Lat, End_Long, User});
+                new MyAsyncPost().execute(new String[]{Start_Lat, Start_Long, End_Lat, End_Long, User, Start_Time, End_Time});
             }
 
         });
 
-        String username = "Johan";
+        username = "Johan";
         String LongLat = HttpGet(username);
         
+        txt.setText(tot_score);
+        
+        
+        
     }
+    
+    private final Runnable mUpdateUITimerTask = new Runnable() {
+        public void run() {
+        	Log.e("bajs", "bärs");
+            HttpGet(username);
+            txt.setText(tot_score);
+        }
+    };
+    
+    
     
     private String HttpGet(String username) {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-
+        
+        mHandler.postDelayed(mUpdateUITimerTask, 5000);
 
         String result = "";
         //the year data to send
@@ -124,9 +158,9 @@ public class MainActivity extends Activity {
                 // parse json data
                 try {
                     JSONObject json_data = new JSONObject(result);
-                    sInfo = "Longitude: " + json_data.getString("Longitude")
-                            + ", Latitude: "
-                            + json_data.getString("Latitude");
+                    sInfo = "Score: " + json_data.getString("score");
+                    tot_score = json_data.getString("score");
+                    
                     Log.e("log_tag", sInfo);
                 } catch (Exception e) {
                     Log.e("log_tag", "Error parsing data " + e.toString());
@@ -173,6 +207,8 @@ public class MainActivity extends Activity {
 	  		  nameValuePairs.add(new BasicNameValuePair("End_Lat", params[2]));
 	  		  nameValuePairs.add(new BasicNameValuePair("End_Long", params[3]));
 	  		  nameValuePairs.add(new BasicNameValuePair("User", params[4]));
+	  		  nameValuePairs.add(new BasicNameValuePair("Start_Time", params[5]));
+	  		  nameValuePairs.add(new BasicNameValuePair("End_Time", params[6]));
 	  		  
 	  		  //We need to encode our data into valid URL format before making HTTP request.		  
 	  		  post.setEntity(new UrlEncodedFormEntity(nameValuePairs));
